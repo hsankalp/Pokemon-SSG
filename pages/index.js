@@ -7,6 +7,7 @@ export default function Home({ pokemons }) {
     <Container>
       <Head>
         <title>Pokemon App</title>
+        <meta name="description" content="List of all the Pokemons" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
