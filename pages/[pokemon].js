@@ -8,7 +8,7 @@ const PokemonPage = ({ pokemon }) => {
     <Container>
       <Head>
         <title>Pokemon App</title>
-        <meta name="description" content={`Description of %${pokemon.name}`} />
+        <meta name="description" content={`Description of ${pokemon.name}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -22,7 +22,9 @@ const PokemonPage = ({ pokemon }) => {
 };
 
 export async function getStaticPaths() {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+  const response = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118"
+  );
   const pokemons = await response.json();
 
   const paths = pokemons.results.map((pokemon) => ({

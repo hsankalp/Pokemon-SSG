@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Heading, Link } from "@chakra-ui/react";
+import { Box, Heading, Link, SimpleGrid } from "@chakra-ui/react";
 import Search from "./Search";
 
 const Catalog = ({ pokemons }) => {
@@ -18,21 +18,39 @@ const Catalog = ({ pokemons }) => {
   };
 
   return (
-    <div>
+    <Box m="1rem">
       <Heading as="h3" size="lg">
         Pokemons
       </Heading>
-      <Search onSearch={handleSearch} />
-      {pokemonList.map(({ name }) => {
-        return (
-          <Link href={name} key={name}>
-            <Box border="1px solid #000" p="1rem" my="1rem">
-              {name}
-            </Box>
-          </Link>
-        );
-      })}
-    </div>
+      <Box mt="1rem">
+        <Search onSearch={handleSearch} />
+      </Box>
+      <SimpleGrid columns={[2, null, 3]} spacing="1rem" my="1rem">
+        {pokemonList.map(({ name }) => {
+          return (
+            <Link href={name} key={name} _hover={{ textDecoration: "none" }}>
+              <Box
+                border="1px solid #000"
+                p="1rem"
+                minHeight="100px"
+                display="grid"
+                placeItems="center"
+              >
+                <Heading
+                  as="h4"
+                  size="sm"
+                  textTransform="capitalize"
+                  textAlign="center"
+                  wordBreak="break-all"
+                >
+                  {name}
+                </Heading>
+              </Box>
+            </Link>
+          );
+        })}
+      </SimpleGrid>
+    </Box>
   );
 };
 
