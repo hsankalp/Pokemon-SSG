@@ -8,7 +8,7 @@ const PokemonPage = ({ pokemon }) => {
     <Container>
       <Head>
         <title>Pokemon App</title>
-        <meta name="description" content={`Description of %${pokemon}`} />
+        <meta name="description" content={`Description of %${pokemon.name}`} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
