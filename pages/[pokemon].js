@@ -2,10 +2,11 @@ import React from "react";
 import Pokemon from "../components/Pokemon";
 import { Container } from "@chakra-ui/react";
 import Head from "next/head";
+import { getPokemonByName, getPokemonList } from "../api/pokemonApi";
 
 const PokemonPage = ({ pokemon }) => {
   return (
-    <Container>
+    <>
       <Head>
         <title>Pokemon App</title>
         <meta name="description" content={`Description of ${pokemon.name}`} />
@@ -13,19 +14,18 @@ const PokemonPage = ({ pokemon }) => {
       </Head>
 
       <main>
-        <Pokemon pokemon={pokemon} />
+        <Container>
+          <Pokemon pokemon={pokemon} />
+        </Container>
       </main>
 
       <footer></footer>
-    </Container>
+    </>
   );
 };
 
 export async function getStaticPaths() {
-  const response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118"
-  );
-  const pokemons = await response.json();
+  const pokemons = await getPokemonList(0, 1118);
 
   const paths = pokemons.results.map((pokemon) => ({
     params: { pokemon: pokemon.name },
@@ -34,10 +34,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const response = await fetch(
-    `https://pokeapi.co/api/v2/pokemon/${params.pokemon}/`
-  );
-  const pokemon = await response.json();
+  const pokemon = await getPokemonByName(params.pokemon);
 
   if (!pokemon) {
     return {

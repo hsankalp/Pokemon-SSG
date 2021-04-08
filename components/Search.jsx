@@ -14,6 +14,7 @@ const Search = ({ onSearch }) => {
         type="text"
         placeholder="Search pokemons"
         onChange={handleChange}
+        colorScheme="teal"
       />
     </InputGroup>
   );

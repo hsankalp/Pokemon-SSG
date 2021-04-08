@@ -1,10 +1,11 @@
 import Head from "next/head";
 import { Container } from "@chakra-ui/react";
 import Catalog from "../components/Catalog";
+import { getPokemonList } from "../api/pokemonApi";
 
-export default function Home({ pokemons }) {
+export default function Home({ pokemons, limit }) {
   return (
-    <Container>
+    <>
       <Head>
         <title>Pokemon App</title>
         <meta name="description" content="List of all the Pokemons" />
@@ -12,19 +13,19 @@ export default function Home({ pokemons }) {
       </Head>
 
       <main>
-        <Catalog pokemons={pokemons} />
+        <Container>
+          <Catalog pokemons={pokemons} limit={limit} />
+        </Container>
       </main>
 
       <footer></footer>
-    </Container>
+    </>
   );
 }
 
 export async function getStaticProps() {
-  const response = await fetch(
-    "https://pokeapi.co/api/v2/pokemon?offset=0&limit=1118"
-  );
-  const pokemons = await response.json();
+  const limit = 24;
+  const pokemons = await getPokemonList(0, limit);
 
   if (!pokemons) {
     return {
@@ -33,6 +34,6 @@ export async function getStaticProps() {
   }
 
   return {
-    props: { pokemons },
+    props: { pokemons, limit },
   };
 }

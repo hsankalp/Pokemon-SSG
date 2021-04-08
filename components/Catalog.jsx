@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Box, Heading, Link, SimpleGrid } from "@chakra-ui/react";
+import { Box, Heading, Link, SimpleGrid, Button } from "@chakra-ui/react";
 import Search from "./Search";
+import { getPokemonList } from "../api/pokemonApi";
 
-const Catalog = ({ pokemons }) => {
+const Catalog = ({ pokemons, limit }) => {
   const [pokemonList, setPokemonList] = useState(pokemons.results);
+  const [next, setNext] = useState(pokemons.next);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
@@ -15,6 +17,12 @@ const Catalog = ({ pokemons }) => {
 
   const handleSearch = (text) => {
     setSearchText(text);
+  };
+
+  const handleClick = async () => {
+    const data = await getPokemonList(pokemonList.length, limit);
+    setPokemonList([...pokemonList, ...data.results]);
+    setNext(data.next);
   };
 
   return (
@@ -30,11 +38,12 @@ const Catalog = ({ pokemons }) => {
           return (
             <Link href={name} key={name} _hover={{ textDecoration: "none" }}>
               <Box
-                border="1px solid #000"
+                backgroundColor="green.100"
                 p="1rem"
-                minHeight="100px"
+                minHeight="75px"
                 display="grid"
                 placeItems="center"
+                borderRadius="5px"
               >
                 <Heading
                   as="h4"
@@ -50,6 +59,21 @@ const Catalog = ({ pokemons }) => {
           );
         })}
       </SimpleGrid>
+      {next && (
+        <Box textAlign="center" my="1rem">
+          <Button
+            colorScheme="teal"
+            variant="outline"
+            size="md"
+            height="40px"
+            width="200px"
+            border="2px"
+            onClick={handleClick}
+          >
+            Load More
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
