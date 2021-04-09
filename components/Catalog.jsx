@@ -5,15 +5,15 @@ import { getPokemonList } from "../api/pokemonApi";
 
 const Catalog = ({ pokemons, limit }) => {
   const [pokemonList, setPokemonList] = useState(pokemons.results);
-  const [next, setNext] = useState(pokemons.next);
+  const [filtered, setFiltered] = useState(pokemons.results);
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    const updated = pokemons.results.filter((pokemon) =>
+    const updated = pokemonList.filter((pokemon) =>
       pokemon.name.includes(searchText)
     );
-    setPokemonList(updated);
-  }, [searchText]);
+    setFiltered(updated);
+  }, [searchText, pokemonList]);
 
   const handleSearch = (text) => {
     setSearchText(text);
@@ -22,8 +22,10 @@ const Catalog = ({ pokemons, limit }) => {
   const handleClick = async () => {
     const data = await getPokemonList(pokemonList.length, limit);
     setPokemonList([...pokemonList, ...data.results]);
-    setNext(data.next);
   };
+
+  const displayLoadMore =
+    filtered.length >= limit && pokemonList.length !== 1118;
 
   return (
     <Box m="1rem">
@@ -34,7 +36,7 @@ const Catalog = ({ pokemons, limit }) => {
         <Search onSearch={handleSearch} />
       </Box>
       <SimpleGrid columns={[2, null, 3]} spacing="1rem" my="1rem">
-        {pokemonList.map(({ name }) => {
+        {filtered.map(({ name }) => {
           return (
             <Link href={name} key={name} _hover={{ textDecoration: "none" }}>
               <Box
@@ -59,7 +61,7 @@ const Catalog = ({ pokemons, limit }) => {
           );
         })}
       </SimpleGrid>
-      {next && (
+      {displayLoadMore && (
         <Box textAlign="center" my="1rem">
           <Button
             colorScheme="teal"
